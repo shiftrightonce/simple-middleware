@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2024-05-24
+
+### 🐛 Bug Fixes
+
+- Add link to code repository on github
+
 ## [0.1.0] - 2024-05-24
 
 ### 🚀 Features
