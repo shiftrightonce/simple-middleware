@@ -73,7 +73,7 @@
 
 ## Examples
 
-The [examples](https://github.com/shiftrightonce/orsomafo/tree/main/examples) folder contains simple and full examples. If none of the examples are helpful,
+The [examples](https://github.com/shiftrightonce/simple-middleware/tree/main/examples) folder contains simple and full examples. If none of the examples are helpful,
 please reach out with your use case and I'll  try to provide one.
 
 ## Feedback
