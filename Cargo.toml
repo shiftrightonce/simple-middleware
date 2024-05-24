@@ -2,6 +2,11 @@
 name = "simple-middleware"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "General purpose middleware crate"
+keywords = ["webdev", "web", "middleware"]
+categories = ["asynchronous", "web-programming"]
+rust-version = "1.78"
 
 [dependencies]
 async-trait = "0.1.68"
