@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2024-05-30
+
+### 🐛 Bug Fixes
+
+- Move all bonds to `where` clause
+- Implement `Default` for the manager
+
 ## [0.1.1] - 2024-05-24
 
 ### 🐛 Bug Fixes
