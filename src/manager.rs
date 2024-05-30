@@ -59,6 +59,12 @@ impl<V: 'static, R: 'static> Manager<V, R> {
     }
 }
 
+impl<V: 'static, R: 'static> Default for Manager<V, R> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub struct Next<V, R> {
     list: SharableListOfMiddlewares<V, R>,
     next: usize,
