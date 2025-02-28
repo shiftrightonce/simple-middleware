@@ -1,13 +1,12 @@
 [package]
 name = "simple-middleware"
 version = "0.1.2"
-edition = "2021"
+edition = "2024"
 license = "MIT"
 description = "General purpose middleware crate"
 repository = "https://github.com/shiftrightonce/simple-middleware"
 keywords = ["webdev", "web", "middleware"]
 categories = ["asynchronous", "web-programming"]
-rust-version = "1.78"
 
 [dependencies]
 async-trait = "0.1.68"
