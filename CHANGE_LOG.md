@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- *(manager)* Remove `block_on` calls
+
+### Examples
+
+- Update examples
+
+## [0.1.3] - 2025-02-28
+
+### 🚀 Features
+
+- *(edition)* Update to 2024 edition
+
 ## [0.1.2] - 2024-05-30
 
 ### 🐛 Bug Fixes
