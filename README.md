@@ -1,13 +1,14 @@
- #Simple Middleware
+# Simple Middleware
 
  Provides the `middleware` pattern that can be used in various ways.
  Middleware pattern allows you to pass a payload through a collection of functions/methods
  expecting a specific result at the end.
 
  Each function has the capability to:
-  - progress the execution to the next middleware
-  - intercept the execution before calling the next middleware
-  - post process the result returned from the previous middleware
+
+- progress the execution to the next middleware
+- intercept the execution before calling the next middleware
+- post process the result returned from the previous middleware
 
  Below is a diagram of six middlewares where `last` is the destination.
  The execution starts at `m5` and progress to m4, m3 and so on.
@@ -39,9 +40,9 @@
                              
 ```
 
- ## Basic example
+## Basic example
 
-```
+```rust
  use simple_middleware::Manager;
 
 
@@ -52,7 +53,7 @@
 
      // 2. This will be the last middleware to be called. Execution starts from the last middleware added to the collection.
      //    Note: this middleware is not calling the next one.
-     m.next(|v, _n| Box::pin(async move { v + 1 }));
+     m.next(|v, _n| Box::pin(async move { v + 1 })).await;
 
      // 3. In this example, this is the last middleware.
      //    It will be the first to be executed
@@ -61,7 +62,7 @@
              // This is how you call the next middleware; by calling the `call` method on `next`
              next.call(value * 3).await
          })
-     });
+     }).await;
 
      // 4. A value is being passed through the middlewares
      //    Note: We are also specifying the expected type that should be returned

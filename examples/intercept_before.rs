@@ -17,25 +17,28 @@ async fn main() {
                 user: Some(user),
             }
         })
-    });
+    })
+    .await;
 
     // 2. This middleware checks the new user payload, verifying their age
     //    before passing the payload on to the next middleware. In this case
     //    it will be the middleware the creates/inserts the user.
-    manager.next(|payload, next| {
-        Box::pin(async move {
-            // validate the data before calling the next middleware
-            if payload.age < 18 {
-                return UserCreatedResult {
-                    success: false,
-                    message: "User is under 18".to_string(),
-                    user: None,
-                };
-            }
+    manager
+        .next(|payload, next| {
+            Box::pin(async move {
+                // validate the data before calling the next middleware
+                if payload.age < 18 {
+                    return UserCreatedResult {
+                        success: false,
+                        message: "User is under 18".to_string(),
+                        user: None,
+                    };
+                }
 
-            next.call(payload).await
+                next.call(payload).await
+            })
         })
-    });
+        .await;
 
     // 3. Fake a failed process
     let fail_result = manager

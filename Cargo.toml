@@ -9,7 +9,7 @@ keywords = ["webdev", "web", "middleware"]
 categories = ["asynchronous", "web-programming"]
 
 [dependencies]
-async-trait = "0.1.68"
+async-trait = "0.1"
 futures = "0.3.27"
 tokio = { version = "1.28.2", features = ["sync"] }
 

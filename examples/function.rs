@@ -3,9 +3,9 @@ use simple_middleware::{Manager, Next};
 
 #[tokio::main]
 async fn main() {
-    let manager = Manager::last(middleware1);
+    let manager = Manager::last(middleware1).await;
 
-    manager.next(middleware2).next(middleware3);
+    manager.next(middleware2).await.next(middleware3).await;
 
     let result = manager.send(2).await;
 
