@@ -1,6 +1,6 @@
 [package]
 name = "simple-middleware"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 license = "MIT"
 description = "General purpose middleware crate"
@@ -11,8 +11,8 @@ categories = ["asynchronous", "web-programming"]
 [dependencies]
 async-trait = "0.1"
 futures = "0.3.27"
-tokio = { version = "1.28.2", features = ["sync"] }
+tokio = { version = "1", features = ["sync"] }
 
 [dev-dependencies]
 tokio = { version = "1.28.2", features = ["full"] }
-uuid = { version = "1.3.4", features = ["v4"] }
+uuid = { version = "1.16", features = ["v4"] }
