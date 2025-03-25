@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2025-03-25
+
+### 🐛 Bug Fixes
+
+- *(bug)* Panic when we reach the end of the middleware
+
 ## [0.2.0] - 2025-03-07
 
 ### 🐛 Bug Fixes
