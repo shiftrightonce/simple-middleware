@@ -72,6 +72,10 @@ impl<V, R> Next<V, R> {
     pub async fn call(mut self, value: V) -> R {
         let list = Arc::clone(&self.list);
         let lock = list.read().await;
+        if (self.next as isize) - 1 < 0 {
+            panic!("There must be a default")
+        }
+
         self.next -= 1;
         if let Some(next) = lock.get(self.next) {
             let mut callback = next.lock().await;
