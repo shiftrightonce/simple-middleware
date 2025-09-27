@@ -3,20 +3,18 @@ use simple_middleware::Manager;
 #[tokio::main]
 async fn main() {
     // 1. The last/inner middleware will "create" a new user
-    let manager = Manager::last(|payload: Payload, _| {
-        Box::pin(async move {
-            let id = std::time::SystemTime::now();
-            let user = User {
-                id: format!("{:?}", id),
-                username: format!("{}{}", &payload.email, &payload.age),
-            };
+    let manager = Manager::last(|payload: Payload, _| async move {
+        let id = std::time::SystemTime::now();
+        let user = User {
+            id: format!("{:?}", id),
+            username: format!("{}{}", &payload.email, &payload.age),
+        };
 
-            UserCreatedResult {
-                success: true,
-                message: "User created successfully".to_string(),
-                user: Some(user),
-            }
-        })
+        UserCreatedResult {
+            success: true,
+            message: "User created successfully".to_string(),
+            user: Some(user),
+        }
     })
     .await;
 
@@ -24,19 +22,17 @@ async fn main() {
     //    before passing the payload on to the next middleware. In this case
     //    it will be the middleware the creates/inserts the user.
     manager
-        .next(|payload, next| {
-            Box::pin(async move {
-                // validate the data before calling the next middleware
-                if payload.age < 18 {
-                    return UserCreatedResult {
-                        success: false,
-                        message: "User is under 18".to_string(),
-                        user: None,
-                    };
-                }
+        .next(|payload, next| async move {
+            // validate the data before calling the next middleware
+            if payload.age < 18 {
+                return UserCreatedResult {
+                    success: false,
+                    message: "User is under 18".to_string(),
+                    user: None,
+                };
+            }
 
-                next.call(payload).await
-            })
+            next.call(payload).await
         })
         .await;
 

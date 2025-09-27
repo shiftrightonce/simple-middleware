@@ -20,9 +20,9 @@ impl<V: 'static, R: 'static> Manager<V, R> {
         }
     }
 
-    pub async fn last<M>(last: M) -> Self
+    pub async fn last<F>(last: impl FnMut(V, Next<V, R>) -> F + Send + 'static) -> Self
     where
-        M: FnMut(V, Next<V, R>) -> BoxFuture<'static, R> + Send + 'static,
+        F: Future<Output = R> + Send + 'static,
     {
         let s = Self::new();
         s.next(last).await;
@@ -45,13 +45,16 @@ impl<V: 'static, R: 'static> Manager<V, R> {
         (callback)(value, next).await
     }
 
-    pub async fn next<M>(&self, m: M) -> &Self
+    pub async fn next<F>(&self, mut m: impl FnMut(V, Next<V, R>) -> F + Send + 'static) -> &Self
     where
-        M: FnMut(V, Next<V, R>) -> BoxFuture<'static, R> + Send + 'static,
+        F: Future<Output = R> + Send + 'static,
     {
         let list = Arc::clone(&self.list);
         let mut lock = list.write().await;
-        lock.push(Mutex::new(Box::new(m)));
+        lock.push(Mutex::new(Box::new(move |v, next| {
+            let cb = (m)(v, next);
+            Box::pin(async move { cb.await })
+        })));
 
         self
     }
@@ -92,8 +95,7 @@ mod test {
     #[tokio::test]
     pub async fn test_last() {
         let result_str = "This is the end of the row";
-        let manager =
-            Manager::last(move |_v, _n| Box::pin(async move { result_str.to_string() })).await;
+        let manager = Manager::last(move |_v, _n| async move { result_str.to_string() }).await;
 
         assert_eq!(&manager.send(()).await, result_str);
     }
@@ -105,11 +107,11 @@ mod test {
         };
 
         manager
-            .next(|value, _next| Box::pin(async move { value }))
+            .next(|value, _next| async move { value })
             .await
-            .next(|value, next| Box::pin(async move { next.call(value * 2).await }))
+            .next(|value, next| async move { next.call(value * 2).await })
             .await
-            .next(|value, next| Box::pin(async move { next.call(value + 2).await }))
+            .next(|value, next| async move { next.call(value + 2).await })
             .await;
 
         let result: i32 = manager.send(10).await;

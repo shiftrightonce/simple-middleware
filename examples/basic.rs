@@ -7,15 +7,19 @@ async fn main() {
 
     // 2. This will be the last middleware to be called. Execution starts from the last middleware added to the collection.
     //    Note: this middleware is not calling the next one.
-    m.next(|v, _n| Box::pin(async move { v + 1 })).await;
+    m.next(|v, _n| async move { v + 1 }).await;
 
     // 3. In this example, this is the last middleware.
     //    It will be the first to be executed
-    m.next(|value, next| {
-        Box::pin(async move {
-            // This is how you call the next middleware; by calling the `call` method on `next`
-            next.call(value * 3).await
-        })
+    m.next(|value, next| async move {
+        // This is how you call the next middleware; by calling the `call` method on `next`
+        next.call(value * 3).await
+    })
+    .await;
+
+    m.next(|value, next| async move {
+        println!("this works really good: {}", &value);
+        next.call(value).await
     })
     .await;
 
